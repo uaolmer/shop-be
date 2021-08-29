@@ -11,13 +11,14 @@ import * as mockData from '../mock.json';
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const productsList: string = await getProducts(mockData);
+    console.log(productsList);
     return formatJSONResponse({
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: productsList[1],
+      body: productsList,
     });
   } catch(error) {
     return formatJSONResponse({
