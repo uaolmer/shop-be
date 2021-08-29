@@ -1,3 +1,3 @@
-export const getProducts = (mockData) => {
+export const getProducts = (mockData: object): string => {
     return JSON.stringify(mockData);
 }

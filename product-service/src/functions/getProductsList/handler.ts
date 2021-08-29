@@ -6,31 +6,29 @@ import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
 import { getProducts } from './db';
-import * as mockData from './mock.json';
+import * as mockData from '../mock.json';
 
-const getProductList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
-    const productsList = await getProducts(mockData);
+    const productsList: string = await getProducts(mockData);
     return formatJSONResponse({
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ productsList }),
-      event,
+      body: productsList[1],
     });
-  } catch(e) {
+  } catch(error) {
     return formatJSONResponse({
       statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ message: 'Error while reading db' }),
-      event,
+      body: JSON.stringify({ message: error.message }),
     });
   }
 };
 
-export const main = middyfy(getProductList);
+export const main = middyfy(getProductsList);
