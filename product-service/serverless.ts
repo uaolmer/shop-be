@@ -27,7 +27,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
     stage: 'dev',
-    region: 'us-west-1',
+    region: 'eu-west-1',
   },
   // import the function via paths
   functions: { getProductsList, getProductsById },

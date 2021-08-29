@@ -1,3 +1,3 @@
-export const getProducts = (mockData: object): string => {
-    return JSON.stringify(mockData);
+export const getProducts = async (mockData: object): Promise<object> => {
+    return mockData;
 }

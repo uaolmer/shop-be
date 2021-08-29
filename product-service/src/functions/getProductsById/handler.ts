@@ -6,33 +6,20 @@ import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
 import { getProduct } from './db';
-import * as mockData from '../mock.json';
+import mockData from '../mock.json';
 
 const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const { productId } = event.pathParameters;
-    const product: object = await getProduct(mockData, productId);
+    const product: any = await getProduct(mockData, productId);
     
     if (typeof product == 'undefined' || Object.keys(product).length == 0)
-      throw new Error('The product does not exist.');
+      throw new Error('Product not found');
 
-    return formatJSONResponse({
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-      body: JSON.stringify(product[1]),
-    });
+    return formatJSONResponse(200, product[1]);
+
   } catch(error) {
-    return formatJSONResponse({
-      statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-      body: JSON.stringify({ message: error.message }),
-    });
+    return formatJSONResponse(500, error.message);
   }
 }
 
