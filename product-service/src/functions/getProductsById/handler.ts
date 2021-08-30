@@ -8,7 +8,7 @@ import schema from './schema';
 import { getProduct } from './db';
 import mockData from '../mock.json';
 
-const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+export const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const { productId } = event.pathParameters;
     const product: any = await getProduct(mockData, productId);
@@ -18,7 +18,7 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async
 
     return formatJSONResponse(200, product[1]);
 
-  } catch(error) {
+  } catch (error) {
     return formatJSONResponse(500, error.message);
   }
 }

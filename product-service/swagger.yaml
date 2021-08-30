@@ -1,0 +1,89 @@
+---
+openapi: 3.0.0
+info:
+  title: Tao
+  description: Tao School Website Api
+  contact:
+    email: shlemov.daniil@gmail.com
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: admin
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /products:
+    get:
+      tags:
+      - developers
+      summary: searches products
+      description: |
+        You can search for
+        available products in the system
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        "500":
+          description: bad request
+  /products/{productId}:
+    get:
+      tags:
+      - developers
+      summary: searches product
+      description: |
+        By passing in the appropriate options, you can search for
+        specific product in the system
+      parameters:
+      - name: productId
+        in: path
+        description: pass an optional search string for looking up products by identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Product not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 14
+        description:
+          type: string
+          example: This course will help you achieve better results at your home practices.
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        price:
+          type: number
+          example: 83.55
+        title:
+          type: string
+          example: Course
+        imageId:
+          type: number
+          example: 1237089
+    Products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
