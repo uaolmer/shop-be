@@ -12,6 +12,7 @@ export const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> 
   let client;
 
   try {
+    console.log("productId: ", event.pathParameters.productId);
     const { productId } = event.pathParameters;
 
     if (!productId) {
@@ -35,6 +36,7 @@ export const getProductsById: ValidatedEventAPIGatewayProxyEvent<typeof schema> 
     return formatJSONResponse(200, { product });
 
   } catch(error) {
+    console.log("DB error: ", error);
     return formatJSONResponse(500, { message: 'Internal server error' });
   
   } finally {

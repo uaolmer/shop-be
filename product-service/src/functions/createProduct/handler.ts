@@ -12,6 +12,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
   let client;
 
   try {
+    console.log("Parameters", event.body);
     const { title, description, price, count } = event.body; 
 
     if (!title || price < 0 || count < 0) {
@@ -46,6 +47,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
     });
 
   } catch (error) {
+    console.log("ROLLBACK", error);
     await client.query('ROLLBACK');
 
     return formatJSONResponse(500, {

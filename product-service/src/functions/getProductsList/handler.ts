@@ -19,6 +19,7 @@ export const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> 
     return formatJSONResponse(200, products);
 
   } catch (error) {
+    console.log("DB error:", error);
     return formatJSONResponse(500, { message: 'Internal server error' });
   
   } finally {
