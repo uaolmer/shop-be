@@ -1,4 +1,4 @@
-import { main as importProductsFile } from "../functions/import-products/handler";
+import { main as importProductsFile } from "../functions/import-products-file/handler";
 //import { main as getProductsList }  from "../functions/getProductsList/handler";
 //import mockData from "../functions/mock.json";
 
