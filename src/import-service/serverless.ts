@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { importProductsFile } from '@functions/index';
+import { importProductsFile, importFileParser } from '@functions/index';
 
 const { BUCKET } = process.env;
 
@@ -45,7 +45,7 @@ const serverlessConfiguration: AWS = {
     region: 'eu-west-1',
   },
   // import the function via paths
-  functions: { importProductsFile },
+  functions: { importProductsFile, importFileParser },
 };
 
 module.exports = serverlessConfiguration;
