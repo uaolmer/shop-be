@@ -12,7 +12,7 @@ const { BUCKET } = process.env;
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const s3: S3 = new S3({ region: 'eu-west-1' });
-    const catalogName = event.queryStringParameters.name;
+    const catalogName: string = event.queryStringParameters.name;
 
     const params: object = {
       Bucket: BUCKET,
@@ -21,7 +21,7 @@ const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = as
       ContentType: 'text/csv',
     }
     
-    const s3Reponse: string = await s3.getSignedUrlPromise('putObject', params);
+    const s3Reponse: string | Record<string, unknown> = await s3.getSignedUrlPromise('putObject', params);
     return formatJSONResponse(200, s3Reponse);
   
   } catch (error) {

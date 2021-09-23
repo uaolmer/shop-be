@@ -2,6 +2,8 @@ import type { AWS } from '@serverless/typescript';
 
 import { importProductsFile } from '@functions/index';
 
+const { BUCKET } = process.env;
+
 const serverlessConfiguration: AWS = {
   service: 'import-service',
   package: {
@@ -26,17 +28,17 @@ const serverlessConfiguration: AWS = {
       {
         Effect: "Allow",
         Action: "s3:ListBucket",
-        Resource: ["arn:aws:s3:::none-in-aws-s3"],
+        Resource: [`arn:aws:s3:::${BUCKET}`],
       },
       {
         Effect: "Allow",
         Action: "s3:*",
-        Resource: ["arn:aws:s3:::none-in-aws-s3/*"],
+        Resource: [`arn:aws:s3:::${BUCKET}/*`],
       },
     ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      BUCKET: '${env:BUCKET}',
+      BUCKET,
     },
     lambdaHashingVersion: '20201221',
     stage: 'dev',
