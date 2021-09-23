@@ -1,8 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { importProductsFile, importFileParser } from '@functions/index';
-
-const { BUCKET } = process.env; 
+import { importProductsFile } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -38,14 +36,14 @@ const serverlessConfiguration: AWS = {
     ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      BUCKET,
+      BUCKET: '${env:BUCKET}',
     },
     lambdaHashingVersion: '20201221',
     stage: 'dev',
     region: 'eu-west-1',
   },
   // import the function via paths
-  functions: { importProductsFile, importFileParser },
+  functions: { importProductsFile },
 };
 
 module.exports = serverlessConfiguration;
