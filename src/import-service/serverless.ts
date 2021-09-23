@@ -6,6 +6,7 @@ const { BUCKET } = process.env;
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
+  useDotenv: true,
   package: {
     individually: true,
   },
@@ -16,7 +17,7 @@ const serverlessConfiguration: AWS = {
       includeModules: true,
     },
   },
-  plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
+  plugins: ['serverless-webpack'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',

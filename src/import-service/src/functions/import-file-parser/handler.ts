@@ -1,22 +1,20 @@
 import 'source-map-support/register';
 
-import { S3 } from 'aws-sdk';
-import { S3Event, S3EventRecord } from 'aws-lambda';
+import * as S3 from 'aws-sdk/clients/s3'
 import { middyfy } from '@libs/lambda';
-import { Stream } from 'stream';
 import { formatJSONResponse } from '@libs/apiGateway';
 import * as csvParser from 'csv-parser';
 
 const { BUCKET } = process.env;
 
-const importFileParser = async (event: S3Event) => {
+const importFileParser = async (event) => {
     try {
         const s3: S3 = new S3({ region: 'eu-west-1' });
         const results: Array<any> = [];
 
-        event.Records.forEach(async (record: S3EventRecord) => {
+        event.Records.forEach(async (record) => {
             const name: string = record.s3.object.key;        
-            const s3Stream: Stream = s3.getObject({
+            const s3Stream = s3.getObject({
                 Bucket: BUCKET,
                 Key: name,
             }).createReadStream();

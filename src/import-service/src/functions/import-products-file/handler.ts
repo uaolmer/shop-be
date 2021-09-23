@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import { S3 } from 'aws-sdk';
+import * as S3 from 'aws-sdk/clients/s3'
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
