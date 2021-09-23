@@ -1,8 +1,8 @@
 import type { AWS } from '@serverless/typescript';
 
-const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
-
 import { importProductsFile, importFileParser } from '@functions/index';
+
+const { BUCKET } = process.env; 
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -24,13 +24,21 @@ const serverlessConfiguration: AWS = {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: "s3:ListBucket",
+        Resource: ["arn:aws:s3:::none-in-aws-s3"],
+      },
+      {
+        Effect: "Allow",
+        Action: "s3:*",
+        Resource: ["arn:aws:s3:::none-in-aws-s3/*"],
+      },
+    ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      PG_HOST,
-      PG_PORT,
-      PG_DATABASE,
-      PG_USERNAME,
-      PG_PASSWORD,
+      BUCKET,
     },
     lambdaHashingVersion: '20201221',
     stage: 'dev',
