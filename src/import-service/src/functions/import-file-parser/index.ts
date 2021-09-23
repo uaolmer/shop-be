@@ -9,12 +9,12 @@ export default {
       s3: {
         bucket: BUCKET,
         event: 's3:ObjectCreated:*',
+        existing: true,
         rules: [
           {
             prefix: 'uploaded/',
           },
         ],
-        existing: true,
       },
     },
   ],

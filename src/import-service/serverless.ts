@@ -38,7 +38,6 @@ const serverlessConfiguration: AWS = {
     ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      BUCKET,
     },
     lambdaHashingVersion: '20201221',
     stage: 'dev',
