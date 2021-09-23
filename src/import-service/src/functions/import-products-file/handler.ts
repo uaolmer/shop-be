@@ -25,7 +25,6 @@ const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = as
     return formatJSONResponse(200, s3Reponse);
   
   } catch (error) {
-    console.error(error);
     return formatJSONResponse(500, { message: error.message });
   }
 }
