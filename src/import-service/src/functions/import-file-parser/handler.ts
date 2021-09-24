@@ -1,9 +1,9 @@
 import 'source-map-support/register';
 
-import * as S3 from 'aws-sdk/clients/s3'
+import S3 from 'aws-sdk/clients/s3';
 import { middyfy } from '@libs/lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
-import * as csvParser from 'csv-parser';
+import csvParser from 'csv-parser';
 
 const { BUCKET } = process.env;
 

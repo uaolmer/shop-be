@@ -1,22 +1,22 @@
 import 'source-map-support/register';
 
-import * as S3 from 'aws-sdk/clients/s3'
+import S3 from 'aws-sdk/clients/s3';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
-import schema from './schema';
+import { IParams } from '../../interfaces/interface';
 
 const { BUCKET } = process.env; 
 
-const importProductsFile: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const importProductsFile: ValidatedEventAPIGatewayProxyEvent = async (event) => {
   try {
     const s3: S3 = new S3({ region: 'eu-west-1' });
-    const catalogName: string = event.queryStringParameters.name;
+    const catalog: string = event.queryStringParameters.name;
 
-    const params: object = {
+    const params: IParams = {
       Bucket: BUCKET,
-      Key: `uploaded/${catalogName}`,
+      Key: `uploaded/${catalog}`,
       Expires: 60,
       ContentType: 'text/csv',
     }

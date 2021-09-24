@@ -1,9 +1,42 @@
 import { main as importProductsFile } from "../functions/import-products-file/handler";
-//import { main as getProductsList }  from "../functions/getProductsList/handler";
-//import mockData from "../functions/mock.json";
+import * as S3 from 'aws-sdk/clients/s3';
 
-test('importProductsFile lambda: status code by Id to be returned', async () => {
-    let productEvent = { pathParameters: '7567ec4b-b10c-48c5-9345-fc73c48a80aa' };
-    const expected = await importProductsFile(productEvent);
-    expect(expected.statusCode).toBe(200);
+
+import { IMock } from '../interfaces/interface';
+
+const { BUCKET } = process.env;
+
+jest.mock('aws-sdk');
+
+describe('service importProductsFile()', (): void => {
+    let mock: IMock;
+  
+    beforeEach(() => {
+        mock = {
+            queryStringParameters: {
+                name: 'mockedName',
+            },
+      };
+    });
+  
+    it('should initialize S3 instance', async (): Promise<void> => {
+      await importProductsFile(mock, undefined, undefined);
+      expect(S3).toHaveBeenCalledTimes(1);
+    });
+  
+    it('should properly call \'getSignedUrlPromise\' method of S3 object', async (): Promise<void> => {
+      await importProductsFile(mock, undefined, undefined);
+
+      const response = S3['mock'].instances[0].getSignedUrlPromise;
+
+      expect(response).toHaveBeenCalledWith('putObject', {
+        Bucket: BUCKET,
+        Key: 'uploaded/mockedName',
+        ContentType: 'text/csv',
+        Expires: 60,
+      });
+
+      expect(response).toHaveBeenCalledTimes(1);
+    });
+  
 });
