@@ -7,12 +7,12 @@ import { middyfy } from '@libs/lambda';
 
 import { IParams } from '../../interfaces/interface';
 
-const { BUCKET } = process.env; 
+import { BUCKET } from '../../constants/constants';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent = async (event) => {
   try {
-    const s3: S3 = new S3({ region: 'eu-west-1' });
-    const catalog: string = event.queryStringParameters.name;
+    const s3 = new S3({ region: 'eu-west-1' });
+    const catalog = event.queryStringParameters.name;
 
     const params: IParams = {
       Bucket: BUCKET,

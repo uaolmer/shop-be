@@ -2,8 +2,6 @@ import type { AWS } from '@serverless/typescript';
 
 import { importProductsFile, importFileParser } from '@functions/index';
 
-const { BUCKET } = process.env;
-
 const serverlessConfiguration: AWS = {
   service: 'import-service',
   useDotenv: true,
@@ -29,12 +27,12 @@ const serverlessConfiguration: AWS = {
       {
         Effect: "Allow",
         Action: "s3:ListBucket",
-        Resource: [`arn:aws:s3:::${BUCKET}`],
+        Resource: ['arn:aws:s3:::${env:BUCKET}'],
       },
       {
         Effect: "Allow",
         Action: "s3:*",
-        Resource: [`arn:aws:s3:::${BUCKET}/*`],
+        Resource: ['arn:aws:s3:::${env:BUCKET}/*'],
       },
     ],
     environment: {
