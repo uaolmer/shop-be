@@ -1,4 +1,4 @@
-import { getProductsById } from "../functions/getProductsById/handler";
+import { main as getProductsById } from "../functions/getProductsById/handler";
 //import { main as getProductsList }  from "../functions/getProductsList/handler";
 //import mockData from "../functions/mock.json";
 

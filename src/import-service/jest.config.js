@@ -9,6 +9,8 @@ module.exports = {
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
+    "preset": "ts-jest",
+    "testEnvironment": "node",
     "moduleNameMapper": {
       "^@common/(.*)$": "<rootDir>/src/common/$1",
       "^@functions/(.*)$": "<rootDir>/src/functions/$1",

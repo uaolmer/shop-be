@@ -6,6 +6,6 @@ export interface IParams {
 }
 
 export interface IMock {
-    queryStringParameters: object;
+    queryStringParameters: object
 }
 

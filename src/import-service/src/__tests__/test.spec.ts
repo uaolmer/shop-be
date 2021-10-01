@@ -1,32 +1,33 @@
 import { main as importProductsFile } from "../functions/import-products-file/handler";
-import * as S3 from 'aws-sdk/clients/s3';
-import { IMock } from '../interfaces/interface';
+import { S3 } from 'aws-sdk';
+import AWS from 'aws-sdk-mock';
+import fs from 'fs';
 
 import { BUCKET } from '../constants/constants';
-
-jest.mock('aws-sdk');
+import { IMock } from "src/interfaces/interface";
 
 describe('service importProductsFile()', (): void => {
-    let mock: IMock;
-  
+    const mockRequest: IMock = { 
+      queryStringParameters: {
+        name: "products.csv",
+      }
+    }
+    
     beforeEach(() => {
-        mock = {
-            queryStringParameters: {
-                name: 'mockedName',
-            },
-      };
+        AWS.mock('S3', 'putObject', Buffer.from(fs.readFileSync('products.csv')));
     });
   
     it('should initialize S3 instance', async (): Promise<void> => {
-      await importProductsFile(mock, undefined, undefined);
-      expect(S3).toHaveBeenCalledTimes(1);
+      const s3 = new S3
+      await importProductsFile(mockRequest, undefined, undefined);
+      expect(AWS).toHaveBeenCalledTimes(1);
     });
 
     it('should properly call \'getSignedUrlPromise\' method of S3 object', async (): Promise<void> => {
-      await importProductsFile(mock, undefined, undefined);
+      await importProductsFile(mockRequest, undefined, undefined);
 
       const response = S3['mock'].instances[0].getSignedUrlPromise;
-
+      
       expect(response).toHaveBeenCalledWith('putObject', {
         Bucket: BUCKET,
         Key: 'uploaded/mockedName',
