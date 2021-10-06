@@ -1,17 +1,17 @@
 import { handlerPath } from '@libs/handlerResolver';
-import { BUCKET } from '../../constants/constants';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
     {
       s3: {
-        bucket: BUCKET,
+        bucket: '${self:custom.client.bucketName}',
         event: 's3:ObjectCreated:*',
         existing: true,
         rules: [
           {
             prefix: 'uploaded/',
+            suffix: '.csv',
           },
         ],
       },

@@ -14,6 +14,10 @@ const serverlessConfiguration: AWS = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    client: {
+      bucketName: '${env:BUCKET}',
+    },
+    s3BucketName: '${self:custom.client.bucketName}',
   },
   plugins: ['serverless-webpack'],
   provider: {
@@ -27,12 +31,20 @@ const serverlessConfiguration: AWS = {
       {
         Effect: "Allow",
         Action: "s3:ListBucket",
-        Resource: ['arn:aws:s3:::${env:BUCKET}'],
+        Resource: [
+          {
+            'Fn::Join': ['', ['arn:aws:s3:::', {Ref: 'ImportS3Bucket'}]]
+          },
+        ],
       },
       {
         Effect: "Allow",
         Action: "s3:*",
-        Resource: ['arn:aws:s3:::${env:BUCKET}/*'],
+        Resource: [
+          {
+            'Fn::Join': ['', ['arn:aws:s3:::', {Ref: 'ImportS3Bucket'}, '/*']]
+          }
+        ],
       },
     ],
     environment: {
@@ -44,6 +56,24 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: { importProductsFile, importFileParser },
+  resources: {
+    Resources: {
+      ImportS3Bucket: {
+        Type: 'AWS::S3::Bucket',
+        Properties: {
+          BucketName: '${self:custom.s3BucketName}',
+          CorsConfiguration: {
+            CorsRules: [
+              { 
+                AllowedHeaders: ['*'], 
+                AllowedMethods: ['GET', 'PUT', 'DELETE'], 
+                AllowedOrigins: ['*'] },
+            ]
+          },
+        },
+      },
+    },
+  },
 };
 
 module.exports = serverlessConfiguration;

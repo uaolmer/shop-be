@@ -10,9 +10,9 @@ import { BUCKET } from '../../constants/constants';
 const importFileParser = async (event) => {
     try {
         const s3: S3 = new S3({ region: 'eu-west-1' });
-        const results: Array<object> = [];
+        const results = [];
 
-        event.Records.forEach(async (record) => {
+        for (const record of event.Records) {
             const name = record.s3.object.key;        
             const s3Stream = s3.getObject({
                 Bucket: BUCKET,
@@ -37,7 +37,7 @@ const importFileParser = async (event) => {
                         Key: name,
                     }).promise();
                 });
-        });
+        };
 
         return formatJSONResponse(200, JSON.stringify(results));
 

@@ -2,10 +2,10 @@ export interface IParams {
     Bucket: string,
     Key: string,
     Expires: number,
-    ContentType: string
+    ContentType: string,
 }
 
 export interface IMock {
-    queryStringParameters: object
+    queryStringParameters: object,
 }
 

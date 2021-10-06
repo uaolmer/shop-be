@@ -6,17 +6,16 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 import { IParams } from '../../interfaces/interface';
-
 import { BUCKET } from '../../constants/constants';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent = async (event) => {
   try {
     const s3: S3 = new S3({ region: 'eu-west-1' });
-    const catalog: string = event.queryStringParameters.name;
+    const { name } = event.queryStringParameters;
 
     const params: IParams = {
       Bucket: BUCKET,
-      Key: `uploaded/${catalog}`,
+      Key: `uploaded/${name}`,
       ContentType: 'text/csv',
       Expires: 60,
     }
