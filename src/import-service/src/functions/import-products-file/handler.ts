@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import S3 from 'aws-sdk/clients/s3';
+import AWS from 'aws-sdk';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
@@ -10,14 +10,14 @@ import { BUCKET } from '../../constants/constants';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent = async (event) => {
   try {
-    const s3: S3 = new S3({ region: 'eu-west-1' });
+    const s3 = new AWS.S3({ signatureVersion: 'v4' });
     const { name } = event.queryStringParameters;
 
     const params: IParams = {
       Bucket: BUCKET,
       Key: `uploaded/${name}`,
       ContentType: 'text/csv',
-      Expires: 60,
+      Expires: 60*5,
     }
     
     const s3Reponse: string | Record<string, unknown> = await s3.getSignedUrlPromise('putObject', params);
