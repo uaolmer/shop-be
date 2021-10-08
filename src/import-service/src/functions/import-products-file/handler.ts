@@ -6,11 +6,11 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 import { IParams } from '../../interfaces/interface';
-import { BUCKET } from '../../constants/constants';
+import { BUCKET, REGION } from '../../constants/constants';
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent = async (event) => {
   try {
-    const s3 = new AWS.S3({ signatureVersion: 'v4' });
+    const s3: AWS.S3 = new AWS.S3({ signatureVersion: 'v4', region: REGION });
     const { name } = event.queryStringParameters;
 
     const params: IParams = {

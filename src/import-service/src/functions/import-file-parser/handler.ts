@@ -1,27 +1,35 @@
 import 'source-map-support/register';
 
-import S3 from 'aws-sdk/clients/s3';
+import AWS from 'aws-sdk';
 import { middyfy } from '@libs/lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import csvParser from 'csv-parser';
 
-import { BUCKET } from '../../constants/constants';
+import { BUCKET, REGION, SQS_URL } from '../../constants/constants';
 
 const importFileParser = async (event) => {
     try {
-        const s3: S3 = new S3({ region: 'eu-west-1' });
-        const results = [];
+        const s3: AWS.S3  = new AWS.S3({ signatureVersion: 'v4', region: REGION });
+        const SQS = new AWS.SQS({ region: REGION });
+        const results: Array<string> = [];
 
         for (const record of event.Records) {
-            const name = record.s3.object.key;        
+            const name = decodeURIComponent(record.s3.object.key);        
             const s3Stream = s3.getObject({
                 Bucket: BUCKET,
                 Key: name,
             }).createReadStream();
       
             s3Stream.pipe(csvParser())
-                .on('data', (data) => {
+                .on('data', async (data) => {
                     results.push(data);
+                    const message: string = JSON.stringify(data);
+                    const messageParams: AWS.SQS.SendMessageRequest = {
+                        QueueUrl: SQS_URL,
+                        MessageBody: message,
+                    };
+
+                    await SQS.sendMessage(messageParams).promise();
                 })
                 .on('error', error => {
                     throw new Error(`Reading file failed: ${error}`);
