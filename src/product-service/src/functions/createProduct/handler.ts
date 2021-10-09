@@ -26,14 +26,14 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
     await client.query('BEGIN');
 
     const { rows: response } = await client.query(
-      'INSERT INTO products(title, description, price) VALUES ($1, $2, $3) returning id',
+      'INSERT INTO products(title, description, price) VALUES($1, $2, $3) returning id',
       [title, description, price]
     );
 
     const { id } = response[0];
 
     await client.query(
-      'INSERT INTO stocks(product_id, count) VALUES ($1, $2)',
+      'INSERT INTO stocks(product_id, count) VALUES($1, $2)',
       [id, count]
     );
 
@@ -56,7 +56,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
 
   } finally {
     if (client) {
-        client.end();
+      client.end();
     }
   }
 }

@@ -46,6 +46,11 @@ const serverlessConfiguration: AWS = {
           }
         ],
       },
+      {
+        Effect: "Allow",
+        Action: "sqs:*",
+        Resource: ['${cf:product-service-dev.SqsArn}'],
+      },
     ],
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
