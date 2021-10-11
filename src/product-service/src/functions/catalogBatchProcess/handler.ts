@@ -17,6 +17,7 @@ export const catalogBatchProcess: ValidatedEventAPIGatewayProxyEvent<typeof sche
 
   for (const item of records) {
     const { title, description, price, count, img } = item;
+    
     try {
       client = new Client(dbOptions);
       await client.connect();
@@ -30,7 +31,7 @@ export const catalogBatchProcess: ValidatedEventAPIGatewayProxyEvent<typeof sche
       const { id } = response[0];
   
       const { rows: stock } = await client.query(
-        "insert into stocks(product_id, count) values($1, $2) returning *",
+        "INSERT INTO stocks(product_id, count) VALUES($1, $2) returning *",
         [id, count]
       );
   
