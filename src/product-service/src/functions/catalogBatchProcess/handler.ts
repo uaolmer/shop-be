@@ -22,7 +22,6 @@ export const catalogBatchProcess = async (event) => {
     await client.connect();
     await client.query('BEGIN');
 
-    console.log(client);
     const { rows: response } = await client.query(
       'INSERT INTO products(title, description, price) VALUES($1, $2, $3) RETURNING id',
       [title, description, price]
