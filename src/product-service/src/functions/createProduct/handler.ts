@@ -26,7 +26,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = 
     await client.query('BEGIN');
 
     const { rows: response } = await client.query(
-      'INSERT INTO products(title, description, price) VALUES($1, $2, $3) returning id',
+      'INSERT INTO products(title, description, price) VALUES($1, $2, $3) RETURNING id',
       [title, description, price]
     );
 
