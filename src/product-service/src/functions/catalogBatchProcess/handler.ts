@@ -10,8 +10,8 @@ import { dbOptions } from '../../dbOptions';
 
 export const catalogBatchProcess = async (event) => {
   let client;
-  
-  const records = event.Records[0].body;
+
+  const records = JSON.parse(event.Records[0].body);
   const { SNS_TOPIC_ARN } = process.env;
   const sns = new AWS.SNS({ region: "eu-west-1" });
 
@@ -22,6 +22,7 @@ export const catalogBatchProcess = async (event) => {
     await client.connect();
     await client.query('BEGIN');
 
+    console.log(client);
     const { rows: response } = await client.query(
       'INSERT INTO products(title, description, price) VALUES($1, $2, $3) RETURNING id',
       [title, description, price]
